@@ -1,0 +1,203 @@
+<html>
+<head>
+<script type="text/javascript">
+var agreements = [
+  ["SAGE", "https://irel.ie/open-access/sage/"],
+  ["Wiley - hybrid journals", "https://irel.ie/open-access/wiley-read-and-publish-agreement/"],
+  ["Elsevier (ScienceDirect)", "https://irel.ie/open-access/sciencedirect/"],
+  ["OUP - hybrid journals", "https://irel.ie/open-access/oxford-university-press/"],
+  ["Taylor and Francis - fully-OA journals", "https://irel.ie/open-access/taylor-and-francis/"],
+  ["Taylor and Francis - hybrid journals", "https://irel.ie/open-access/taylor-and-francis/"],
+  ["Wiley - fully OA journals", "https://irel.ie/open-access/wiley-read-and-publish-agreement/"],
+  ["Cambridge University Press", "https://irel.ie/open-access/cambridge-university-press/"],
+  ["ACM", "https://irel.ie/open-access/acm-open/"],
+  ["ACS","https://irel.ie/open-access/american-chemical-society/"],
+  ["AIP Publishing","https://irel.ie/open-access/american-institute-of-physics/"],
+  ["APA","https://irel.ie/open-access/american-psychological-association-apa/"],
+  ["BMJ","https://irel.ie/open-access/bmj/"],
+  ["Emerald","https://irel.ie/open-access/emerald/"],
+  ["IEEE","https://irel.ie/open-access/ieee/"],
+  ["IOP","https://irel.ie/open-access/institute-of-physics/"],
+  ["Microbiology Society","https://irel.ie/open-access/microbiology-society/"],
+  ["PLOS","https://irel.ie/open-access/plos/"],
+  ["Royal Irish Academy","https://irel.ie/open-access/royal-irish-academy/"],
+  ["Royal Society","https://irel.ie/open-access/royal-society/"],
+  ["Royal Society of Chemistry","https://irel.ie/open-access/royal-society-of-chemistry/"],
+  ["Springer Nature","https://irel.ie/open-access/springer-compact/"]
+];
+
+// Original function for sorting the table
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
+// Function to add the 'mouseover' event listeners to cells in the second, third and fourth columns
+function addMouseoverListeners() {
+  var table = document.getElementById("myTable");
+  var tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+    var secondColumn = tr[i].getElementsByTagName("td")[1];
+    var thirdColumn = tr[i].getElementsByTagName("td")[2];
+    var fourthColumn = tr[i].getElementsByTagName("td")[3];
+
+    if (secondColumn && secondColumn.textContent.length > 3) {
+      secondColumn.addEventListener('mouseover', function() {
+        addHyperlink(this);
+      });
+    }
+
+    if (thirdColumn && thirdColumn.textContent.length > 3) {
+      thirdColumn.addEventListener('mouseover', function() {
+        addHyperlink(this);
+      });
+    }
+
+    // Add 'mouseover' event listener to the fourth column
+    if (fourthColumn) {
+      fourthColumn.addEventListener('mouseover', function() {
+        addUniversityHyperlink(this);
+      });
+    }
+  }
+}
+
+
+// Function to add a hyperlink to a given cell when the mouse is hovered over it
+function addHyperlink(column) {
+   if (column.getElementsByTagName('a').length > 0) {
+    return;
+  }
+  var originalContent = column.innerHTML;
+  var url = "https://portal.issn.org/resource/ISSN/" + column.textContent;
+  column.innerHTML = '<a href="' + url + '" target="_blank">' + column.textContent + '</a>';
+
+  //column.addEventListener('mouseout', function() {
+  //  column.innerHTML = originalContent;
+  //});
+}
+// Function to add a hyperlink to a given cell in the fourth column when the mouse is hovered over it
+function addUniversityHyperlink(column) {
+  // If the cell already contains a hyperlink, don't add another one
+  if (column.getElementsByTagName('a').length > 0) {
+    return;
+  }
+
+  var originalContent = column.innerHTML;
+  var publisherName = column.textContent;
+  var url;
+
+  // Find the university in the array and get its URL
+  for (var i = 0; i < agreements.length; i++) {
+    if (agreements[i][0] === publisherName) {
+      url = agreements[i][1];
+      break;
+    }
+  }
+
+  // If a URL was found, add the hyperlink to the cell
+  if (url) {
+    column.innerHTML = '<a href="' + url + '" target="_blank">' + publisherName + '</a>';
+  }
+
+  
+}
+
+// Call the function that adds the 'mouseover' event listeners when the page loads
+window.onload = addMouseoverListeners;
+
+</script>
+<style>
+
+body{
+    padding: 30px;
+}
+h1{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+* {
+  font-family: sans-serif;
+}
+#myInput {
+  /* background-image: url('/css/searchicon.png'); Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 26px; /* Increase font-size */
+  font-weight; bold;
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #666; /* Add a grey border */
+  margin-bottom: 20px; /* Add some space below the input */
+  margin-top: 20px; /* Add some space above the input */
+  border-radius: 6px;
+}
+
+#myTable {
+  border-collapse: collapse; /* Collapse borders */
+  width: 100%; /* Full-width */
+  border: 1px solid #ddd; /* Add a grey border */
+  font-size: 14px; /* Increase font-size */
+}
+
+#myTable th, #myTable td {
+  text-align: left; /* Left-align text */
+  padding: 5px; /* Add padding */
+}
+
+#myTable tr {
+  /* Add a bottom border to all table rows */
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  /* Add a grey background color to the table header and on hover */
+  background-color: #f1f1f1;
+}
+#myTable a{
+  text-decoration: none;
+  color: black;
+}
+#notice{
+ /* 
+  background-color: wite;
+  border-radius: 5px;
+  padding: 10px;
+  border: solid 1px #c0c0c0;
+  margin-bottom: 20px;
+  */
+}
+</style>
+</head>
+<body>
+<!-- 
+<h1>IReL open access agreements: journal list</h1>
+<ul>
+<li>- Corresponding authors affiliated with participating IReL member institutions can publish articles open access at no cost in these journals</li>
+<li>- The list will be updated periodically as publishers may add or remove journals from their lists during an agreement</li>
+<li>- Corresponding authors must be a current staff or student at a participating institution at the time the article is accepted for publication</li>
+<li>- OA is subject to approval by member institutions and any limits to the number of articles per publisher per year</li>
+<li>- These journals aren't the only path to making your work OA. Your institution's library can advice on this. </li>
+<li>- Further information on IReL's OA agreements: https://irel.ie/open-access/ </li>
+<li>- Contact: either contact your institution's library or irel@mu.ie</li>
+</ul>
+-->
+
